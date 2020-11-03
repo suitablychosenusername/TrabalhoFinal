@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class Conexao{
     private static final String driver = "com.mysql.cj.jdbc.Driver";
-    private static final String url = "jdbc:mysql://localhost/TrabalhoFinal"; // Insira db
+    private static final String url = "jdbc:mysql://localhost/TrabalhoFinal?useTimezone=true&serverTimezone=UTC"; // Insira db
     private static final String user = ""; // Insira username
     private static final String password = ""; // Insira senha aqui
     

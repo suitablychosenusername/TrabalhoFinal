@@ -3,6 +3,7 @@ package br.com.hotel.controller;
 import java.util.List;
 
 import br.com.hotel.model.Hospedagem;
+import br.com.hotel.model.Chale;
 import br.com.hotel.persistence.HospedagemDAOImp;
 
 public class HospedagemController{
@@ -18,12 +19,16 @@ public class HospedagemController{
         HospedagemDAOImp hospedagemDao = new HospedagemDAOImp();
         return hospedagemDao.delete(hospedagem);
     }
+    public String delete(Chale chale){
+        HospedagemDAOImp hospedagemDao = new HospedagemDAOImp();
+        return hospedagemDao.delete(chale);
+    }
     public List<Hospedagem> listAll(){
         HospedagemDAOImp hospedagemDao = new HospedagemDAOImp();
         return hospedagemDao.listAll();
     }
-    public Hospedagem searchCod(Integer cod){
+    public List<Hospedagem> search(Hospedagem hospedagem){
         HospedagemDAOImp hospedagemDao = new HospedagemDAOImp();
-        return hospedagemDao.searchCod(cod);
+        return hospedagemDao.search(hospedagem);
     }
 }

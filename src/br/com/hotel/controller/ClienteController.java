@@ -22,8 +22,8 @@ public class ClienteController{
         ClienteDAOImp clienteDao = new ClienteDAOImp();
         return clienteDao.listAll();
     }
-    public Cliente searchCod(Integer cod){
+    public List<Cliente> search(Cliente cliente){
         ClienteDAOImp clienteDao = new ClienteDAOImp();
-        return clienteDao.searchCod(cod);
+        return clienteDao.search(cliente);
     }
 }

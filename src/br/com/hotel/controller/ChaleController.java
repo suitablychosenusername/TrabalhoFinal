@@ -22,8 +22,12 @@ public class ChaleController{
         ChaleDAOImp chaleDao = new ChaleDAOImp();
         return chaleDao.listAll();
     }
-    public Chale searchCod(String cod){
+    public List<Chale> search(Chale chale){
         ChaleDAOImp chaleDao = new ChaleDAOImp();
-        return chaleDao.searchCod(cod);
+        return chaleDao.search(chale);
+    }
+    public Chale search(String cod) {
+    	ChaleDAOImp chaleDao = new ChaleDAOImp();
+        return chaleDao.search(cod);
     }
 }

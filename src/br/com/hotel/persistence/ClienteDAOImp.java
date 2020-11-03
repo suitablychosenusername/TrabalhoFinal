@@ -119,25 +119,55 @@ public class ClienteDAOImp implements ClienteDAO{
         }
     }
     @Override
-    public Cliente searchCod(Integer cod){
-        String sql = "select * from Cliente where codCliente = ?";
+    public List<Cliente> search(Cliente cliente){
+        String sql = "select * from Cliente where 1=1";
+        if(cliente.getCodCliente() != null) {
+        	sql = sql + " and codCliente = " + String.valueOf(cliente.getCodCliente());
+        }
+        if(cliente.getNomeCliente() != null) {
+        	sql = sql + " and nomeCliente like \"" + cliente.getNomeCliente() + "\"";
+        }
+        if(cliente.getRgCliente() != null) {
+        	sql = sql + " and rgCliente like \"" + cliente.getRgCliente() + "\"";
+        }
+        if(cliente.getEnderecoCliente() != null) {
+        	sql = sql + " and enderecoCliente like \"" + cliente.getEnderecoCliente() + "\"";
+        }
+        if(cliente.getBairroCliente() != null) {
+        	sql = sql + " and bairroCliente like \"" + cliente.getBairroCliente() + "\"";
+        }
+        if(cliente.getCidadeCliente() != null) {
+        	sql = sql + " and cidadeCliente like \"" + cliente.getCidadeCliente() + "\"";
+        }
+        if(cliente.getEstadoCliente() != null) {
+        	sql = sql + " and estadoCliente like \"" + cliente.getEstadoCliente() + "\"";
+        }
+        if(cliente.getCepCliente() != null) {
+        	sql = sql + " and cepCliente like \"" + cliente.getCepCliente() + "\"";
+        }
+        if(cliente.getNascimentoCliente() != null) {
+        	sql = sql + " and nascimentoCliente like \"" + cliente.getNascimentoCliente() + "\"";
+        }
         Connection con = Conexao.getConexao();
+        List<Cliente> clientes = new ArrayList<>();
         try{
             PreparedStatement pstate = con.prepareStatement(sql);
-            pstate.setInt(1, cod);
             ResultSet resp = pstate.executeQuery();
-            if(resp.next()){
-                Cliente tupla = new Cliente();
-                tupla.setCodCliente(resp.getInt(1));
-                tupla.setNomeCliente(resp.getString(2));
-                tupla.setRgCliente(resp.getString(3));
-                tupla.setEnderecoCliente(resp.getString(4));
-                tupla.setBairroCliente(resp.getString(5));
-                tupla.setCidadeCliente(resp.getString(6));
-                tupla.setEstadoCliente(resp.getString(7));
-                tupla.setCepCliente(resp.getString(8));
-                tupla.setNascimentoCliente(resp.getString(9));
-                return tupla;
+            if(resp != null){
+                while (resp.next()){
+                    Cliente tupla = new Cliente();
+                    tupla.setCodCliente(resp.getInt(1));
+                    tupla.setNomeCliente(resp.getString(2));
+                    tupla.setRgCliente(resp.getString(3));
+                    tupla.setEnderecoCliente(resp.getString(4));
+                    tupla.setBairroCliente(resp.getString(5));
+                    tupla.setCidadeCliente(resp.getString(6));
+                    tupla.setEstadoCliente(resp.getString(7));
+                    tupla.setCepCliente(resp.getString(8));
+                    tupla.setNascimentoCliente(resp.getString(9));
+                    clientes.add(tupla);
+                }
+                return clientes;
             }else{
                 return null;
             }

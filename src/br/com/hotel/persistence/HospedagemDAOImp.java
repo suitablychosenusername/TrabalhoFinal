@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import br.com.hotel.model.Hospedagem;
+import br.com.hotel.model.Chale;
 
 public class HospedagemDAOImp implements HospedagemDAO{
 
@@ -84,6 +85,25 @@ public class HospedagemDAOImp implements HospedagemDAO{
         }
     }
     @Override
+    public String delete(Chale chale){
+        String sql = "delete from Hospedagem where codChale = ?";
+        Connection con = Conexao.getConexao();
+        try{
+            PreparedStatement pstate = con.prepareStatement(sql);
+            pstate.setString(1,chale.getCodChale());
+            int resp = pstate.executeUpdate();
+            if(resp != 0){
+                return "SUCESSO NA REMOCAO.";
+            }else{
+                return "ERRO NA REMOCAO.";
+            }
+        }catch(SQLException e){
+            return e.getMessage();
+        }finally{
+            Conexao.close(con);
+        }
+    }
+    @Override
     public List<Hospedagem> listAll(){
         String sql = "select * from Hospedagem";
         Connection con = Conexao.getConexao();
@@ -116,24 +136,51 @@ public class HospedagemDAOImp implements HospedagemDAO{
         }
     }
     @Override
-    public Hospedagem searchCod(Integer cod){
-        String sql = "select * from Hospedagem where codHospedagem = ?";
+    public List<Hospedagem> search(Hospedagem hospedagem){
+        String sql = "select * from Hospedagem where 1=1";
+        if(hospedagem.getCodHospedagem() != null) {
+        	sql = sql + " and codHospedagem = " + String.valueOf(hospedagem.getCodHospedagem());
+        }
+        if(hospedagem.getCodChale() != null) {
+        	sql = sql + " and codChale = " + hospedagem.getCodChale();
+        }
+        if(hospedagem.getEstado() != null) {
+        	sql = sql + " and estado like \"" + hospedagem.getEstado() + "\"";
+        }
+        if(hospedagem.getDataInicio() != null) {
+        	sql = sql + " and dataInicio like \"" + hospedagem.getDataInicio() + "\"";
+        }
+        if(hospedagem.getDataFim() != null) {
+        	sql = sql + " and dataFim like \"" + hospedagem.getDataFim() + "\"";
+        }
+        if(hospedagem.getQtdPessoas() != null) {
+        	sql = sql + " and qtdPessoas = " + String.valueOf(hospedagem.getQtdPessoas());
+        }
+        if(hospedagem.getDesconto() != null) {
+        	sql = sql + " and desconto = " + String.valueOf(hospedagem.getDesconto());
+        }
+        if(hospedagem.getValorFinal() != null) {
+        	sql = sql + " and valorFinal = " + String.valueOf(hospedagem.getValorFinal());
+        }
         Connection con = Conexao.getConexao();
+        List<Hospedagem> Hospedagens = new ArrayList<>();
         try{
             PreparedStatement pstate = con.prepareStatement(sql);
-            pstate.setInt(1, cod);
             ResultSet resp = pstate.executeQuery();
-            if(resp.next()){
-                Hospedagem tupla = new Hospedagem();
-                tupla.setCodHospedagem(resp.getInt(1));
-                tupla.setCodChale(resp.getString(2));
-                tupla.setEstado(resp.getString(3));
-                tupla.setDataInicio(resp.getString(4));
-                tupla.setDataFim(resp.getString(5));
-                tupla.setQtdPessoas(resp.getInt(6));
-                tupla.setDesconto(resp.getInt(7));
-                tupla.setValorFinal(resp.getDouble(8));
-                return tupla;
+            if(resp != null){
+                while (resp.next()){
+                    Hospedagem tupla = new Hospedagem();
+                    tupla.setCodHospedagem(resp.getInt(1));
+                    tupla.setCodChale(resp.getString(2));
+                    tupla.setEstado(resp.getString(3));
+                    tupla.setDataInicio(resp.getString(4));
+                    tupla.setDataFim(resp.getString(5));
+                    tupla.setQtdPessoas(resp.getInt(6));
+                    tupla.setDesconto(resp.getInt(7));
+                    tupla.setValorFinal(resp.getDouble(8));
+                    Hospedagens.add(tupla);
+                }
+                return Hospedagens;
             }else{
                 return null;
             }

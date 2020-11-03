@@ -107,12 +107,55 @@ public class ChaleDAOImp implements ChaleDAO{
         }
     }
     @Override
-    public Chale searchCod(String cod){
-        String sql = "select * from Chale where codChale = ?";
+    public List<Chale> search(Chale chale){
+        String sql = "select * from Chale where 1=1";
+        if(chale.getCodChale() != null) {
+        	sql = sql + " and codChale like \"" + chale.getCodChale() + "\"";
+        }
+        if(chale.getLocalizacao() != null) {
+        	sql = sql + " and localizacao like \"" + chale.getLocalizacao() + "\"";
+        }
+        if(chale.getCapacidade() != null) {
+        	sql = sql + " and capacidade = " + String.valueOf(chale.getCapacidade());
+        }
+        if(chale.getValorAltaEstacao() != null) {
+        	sql = sql + " and valorAltaEstacao = " + String.valueOf(chale.getValorAltaEstacao());
+        }
+        if(chale.getValorBaixaEstacao() != null) {
+        	sql = sql + " and valorBaixaEstacao = " + String.valueOf(chale.getValorBaixaEstacao());
+        }
+        Connection con = Conexao.getConexao();
+        List<Chale> chales = new ArrayList<>();
+        try{
+            PreparedStatement pstate = con.prepareStatement(sql);
+            ResultSet resp = pstate.executeQuery();
+            if(resp != null){
+                while (resp.next()){
+                    Chale tupla = new Chale();
+                    tupla.setCodChale(resp.getString(1));
+                    tupla.setLocalizacao(resp.getString(2));
+                    tupla.setCapacidade(resp.getInt(3));
+                    tupla.setValorAltaEstacao(resp.getDouble(4));
+                    tupla.setValorBaixaEstacao(resp.getDouble(5));
+                    chales.add(tupla);
+                }
+                return chales;
+            }else{
+                return null;
+            }
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }finally{
+            Conexao.close(con);
+        }
+    }
+    @Override
+    public Chale search(String cod){
+        String sql = "select * from Chale where codChale = \"" + cod + "\"";
         Connection con = Conexao.getConexao();
         try{
             PreparedStatement pstate = con.prepareStatement(sql);
-            pstate.setString(1, cod);
             ResultSet resp = pstate.executeQuery();
             if(resp.next()){
                 Chale tupla = new Chale();

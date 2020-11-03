@@ -8,5 +8,5 @@ public interface ClienteDAO{
     public String alt(Cliente cliente);
     public String delete(Cliente cliente);
     public List<Cliente> listAll();
-    public Cliente searchCod(Integer cod);
+    public List<Cliente> search(Cliente cliente);
 }

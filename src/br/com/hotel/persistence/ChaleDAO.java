@@ -8,5 +8,6 @@ public interface ChaleDAO{
     public String alt(Chale chale);
     public String delete(Chale chale);
     public List<Chale> listAll();
-    public Chale searchCod(String cod);
+    public List<Chale> search(Chale chale);
+    public Chale search(String cod);
 }
